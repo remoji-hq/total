@@ -1,0 +1,67 @@
+
+00NMSDR20V03-05     000001-Jan-01 12:03:111111
+10NMSEREGA1         
+01KI1  Nikon NPL-332 042380  Nikon NPL-332 04238012     0.000     0.000     0.000
+13NM SEREGA1 <JOB> Downloaded 01-Jan-2001 12:03:59
+13NMSoftware: Pre-install version: 1.22
+13NMInstrument: Nikon NPL-332
+13NMDist Units: Metres
+13NMAngle Units: Dec.Degrees
+13NMZero azimuth: North
+13NMZero VA: Horizon
+13NMProjection correction: OFF
+13NMC&R correction: OFF
+13NMCoord Order: NEZ
+13NMClient: 
+13NMDescription: 
+13NMTilt Correction:  VA:ON HA:OFF
+13NM SEREGA1 <JOB> Created 25-Mar-2001 01:07:34
+13NMTemp:20C Press:761mmHg Prism:30 25-Mar-2001 01:19:13
+13NMHA set in Quick Station
+02KIOMS10.000     0.000     0.000     0.000     
+07KIOMS1OMS20.0000    0.0000    
+03NM0.000     
+09F1OMS1MS2.28.053    359.6575  0.0003                    
+09F1OMS1000169.046    0.3008    354.0536                  
+13NMTemp:20C Press:761mmHg Prism:0 25-Mar-2001 01:22:43
+09F1OMS1000210.116    1.7847    303.3781                  
+09F1OMS100038.427     1.1792    261.1367                  
+13NMTemp:20C Press:761mmHg Prism:30 25-Mar-2001 01:23:38
+09F1OMS1000453.557    359.7792  352.2261                  
+09F1OMS10005          359.7792  352.1458                  
+13NMTemp:20C Press:761mmHg Prism:0 25-Mar-2001 01:24:29
+09F1OMS1000616.355    359.7700  212.4358                  
+13NMTemp:20C Press:761mmHg Prism:30 25-Mar-2001 01:25:45
+09F1OMS1000722.407    1.2756    285.5011                  
+13NMTemp:20C Press:761mmHg Prism:0 25-Mar-2001 01:25:54
+09F1OMS1000830.273    359.7656  282.0806                  
+13NMTemp:20C Press:761mmHg Prism:30 25-Mar-2001 01:26:17
+09F1OMS1000930.677    359.7114  269.1631                  
+09F1OMS1001036.927    1.2950    280.1697                  
+09F1OMS100T127.343    359.8103  283.5481                  
+09F1OMS100T127.341    180.1858  103.5467                  
+13NMRAW added:dX=-0.001 dY=0.002 dZ=0.002
+13NMTemp:20C Press:761mmHg Prism:30 25-Mar-2001 01:31:22
+13NMHA set in Quick Station
+02KI00T16.405     -26.582   -0.091    0.000     
+07KI00T1OMS10.0000    0.0000    
+09F100T10T2.27.341    359.9725  0.0000                    
+09F100T1001155.257    359.8267  262.9072                  
+09F100T10012          359.8261  263.0044                  
+09F100T1001363.214    359.7658  262.4200                  
+09F100T1001463.876    0.5422    255.1131                  
+09F100T1001556.631    359.8222  254.8144                  
+13NMTemp:20C Press:761mmHg Prism:30 28-Apr-2001 11:48:33
+02KI000168.674    -7.153    0.363     0.000     
+07KI00010002181.1711  0.0000    
+13F100000002          87.3567   0.0000                    
+08KI0254100.000   200.000                             
+08KI00521.000     2.000                               
+08KI002158.000    36.000                              
+13NMTemp:20C Press:761mmHg Prism:30 28-Apr-2001 11:50:42
+02KI00521.000     2.000               0.000     
+07KI0052002130.8158   0.0000    
+13F100000021          87.3558   0.0000                    
+08KI050025.000    26.000                              
+0000
+

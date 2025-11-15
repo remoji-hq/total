@@ -1,0 +1,41 @@
+
+00NMSDR20V03-05     000001-Jan-01 12:04:111111
+10NMSEREGA1         
+01KI1  Nikon NPL-332 042380  Nikon NPL-332 04238012     0.000     0.000     0.000
+13NM SEREGA1 <JOB> Downloaded 01-Jan-2001 12:04:48
+13NMSoftware: Pre-install version: 1.22
+13NMInstrument: Nikon NPL-332
+13NMDist Units: Metres
+13NMAngle Units: Dec.Degrees
+13NMZero azimuth: North
+13NMZero VA: Horizon
+13NMProjection correction: OFF
+13NMC&R correction: OFF
+13NMCoord Order: NEZ
+13NMClient: 
+13NMDescription: 
+13NMTilt Correction:  VA:ON HA:OFF
+13NM SEREGA1 <JOB> Created 25-Mar-2001 01:07:34
+08KIOMS10.000     0.000     0.000                     
+08KIMS2.28.052    0.000     -0.168                    
+08KI000168.674    -7.153    0.363                     
+08KI00025.563     -8.443    0.315                     
+08KI0003-1.298    -8.325    0.173                     
+08KI000453.064    -7.244    -0.206                    
+08KI0006-13.803   -8.772    -0.066                    
+08KI00075.987     -21.587   0.499                     
+08KI00086.336     -29.602   -0.124                    
+08KI0009-0.448    -30.673   -0.155                    
+08KI00106.518     -36.338   0.835                     
+08KI00T16.405     -26.582   -0.091                    
+08KI0T2.33.746    -26.582   -0.104                    
+08KI0011-0.418    -81.416   -0.258                    
+08KI0013-1.934    -89.243   -0.349                    
+08KI0014-10.005   -88.311   0.513                     
+08KI0015-8.429    -81.235   -0.267                    
+08KI0254100.000   200.000                             
+08KI00521.000     2.000                               
+08KI002158.000    36.000                              
+08KI050025.000    26.000                              
+0000
+

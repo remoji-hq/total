@@ -1,0 +1,67 @@
+
+00NMSDR33V04-01     000001-Jan-01 12:00:111111
+10NMSEREGA1         121111
+01KI1  Nikon NPL-332 042380  Nikon NPL-332 04238012     0.000     0.000     0.000
+13NM SEREGA1 <JOB> Downloaded 01-Jan-2001 12:00:47
+13NMSoftware: Pre-install version: 1.22
+13NMInstrument: Nikon NPL-332
+13NMDist Units: Metres
+13NMAngle Units: Dec.Degrees
+13NMZero azimuth: North
+13NMZero VA: Horizon
+13NMProjection correction: OFF
+13NMC&R correction: OFF
+13NMCoord Order: NEZ
+13NMClient: 
+13NMDescription: 
+13NMTilt Correction:  VA:ON HA:OFF
+13NM SEREGA1 <JOB> Created 25-Mar-2001 01:07:34
+13NMTemp:20C Press:761mmHg Prism:30 25-Mar-2001 01:19:13
+13NMHA set in Quick Station
+02KI            OMS10.000           0.000           0.000           0.000           
+07KI            OMS1            OMS20.00000000      0.00000000      
+03NM0.000           
+09F1            OMS1           OMS2.28.053          359.65750000    0.00027778                      
+09F1            OMS1               169.046          0.30083333      354.05361111                    
+13NMTemp:20C Press:761mmHg Prism:0 25-Mar-2001 01:22:43
+09F1            OMS1               210.116          1.78472222      303.37805556                    
+09F1            OMS1               38.427           1.17916667      261.13666667                    
+13NMTemp:20C Press:761mmHg Prism:30 25-Mar-2001 01:23:38
+09F1            OMS1               453.557          359.77916667    352.22611111                    
+09F1            OMS1               5                359.77916667    352.14583333                    
+13NMTemp:20C Press:761mmHg Prism:0 25-Mar-2001 01:24:29
+09F1            OMS1               616.355          359.77000000    212.43583333                    
+13NMTemp:20C Press:761mmHg Prism:30 25-Mar-2001 01:25:45
+09F1            OMS1               722.407          1.27555556      285.50111111                    
+13NMTemp:20C Press:761mmHg Prism:0 25-Mar-2001 01:25:54
+09F1            OMS1               830.273          359.76555556    282.08055556                    
+13NMTemp:20C Press:761mmHg Prism:30 25-Mar-2001 01:26:17
+09F1            OMS1               930.677          359.71138889    269.16305556                    
+09F1            OMS1              1036.927          1.29500000      280.16972222                    
+09F1            OMS1              T127.343          359.81027778    283.54805556                    
+09F1            OMS1              T127.341          180.18583333    103.54666667                    
+13NMRAW added:dX=-0.001 dY=0.002 dZ=0.002
+13NMTemp:20C Press:761mmHg Prism:30 25-Mar-2001 01:31:22
+13NMHA set in Quick Station
+02KI              T16.405           -26.582         -0.091          0.000           
+07KI              T1            OMS10.00000000      0.00000000      
+09F1              T1             T2.27.341          359.97250000    0.00000000                      
+09F1              T1              1155.257          359.82666667    262.90722222                    
+09F1              T1              12                359.82611111    263.00444444                    
+09F1              T1              1363.214          359.76583333    262.42000000                    
+09F1              T1              1463.876          0.54222222      255.11305556                    
+09F1              T1              1556.631          359.82222222    254.81444444                    
+13NMTemp:20C Press:761mmHg Prism:30 28-Apr-2001 11:48:33
+02KI               168.674          -7.153          0.363           0.000           
+07KI               1               2181.17111111    0.00000000      
+13F1               0               2                87.35666667     0.00000000                      
+08KI             254100.000         200.000                                         
+08KI              521.000           2.000                                           
+08KI              2158.000          36.000                                          
+13NMTemp:20C Press:761mmHg Prism:30 28-Apr-2001 11:50:42
+02KI              521.000           2.000                           0.000           
+07KI              52              2130.81583333     0.00000000      
+13F1               0              21                87.35583333     0.00000000                      
+08KI             50025.000          26.000                                          
+0000
+
