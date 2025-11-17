@@ -1,8 +1,12 @@
 [package]
 name = "total"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2024"
 license = "MIT"
 description = "Total station helper tool"
+repository = "https://github.com/remoji-hq/total"
 
 [dependencies]
+clap = { version = "4.5", features = ["derive"] }
+dxf = "0.6"
+geojson = "0.24"
