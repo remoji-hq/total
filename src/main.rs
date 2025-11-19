@@ -2,9 +2,10 @@ use std::io;
 
 use clap::{Parser, Subcommand};
 
-use crate::convert::ConvertOptions;
+use self::convert::ConvertOptions;
 
 mod convert;
+mod format;
 
 /// Total station helper tool
 #[derive(Parser, Debug)]

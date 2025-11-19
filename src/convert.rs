@@ -1,21 +1,17 @@
-use std::{
-    fs::File,
-    io::{self, BufRead, BufReader},
-    path::PathBuf,
-};
+use std::{io, path::PathBuf};
 
-use clap::{Args, ValueEnum};
+use clap::Args;
 
-const MIN_LEN: usize = 4;
+use crate::format::{DxfReader, DxfWriter, Format, SdrReader};
 
 #[derive(Args, Debug)]
 pub struct ConvertOptions {
     /// Source data format
     #[clap(short, long, value_enum, value_name = "FORMAT")]
-    from: Option<ConvertFrom>,
+    from: Format,
     /// Destination data format
     #[clap(short, long, value_enum, value_name = "FORMAT")]
-    to: ConvertTo,
+    to: Format,
     /// Output file path
     #[clap(short, long, value_name = "FILE")]
     output: Option<PathBuf>,
@@ -24,47 +20,29 @@ pub struct ConvertOptions {
     input: PathBuf,
 }
 
-#[derive(Debug, Clone, ValueEnum)]
-pub enum ConvertFrom {
-    Sdr33Coord,
-}
-
-#[derive(Debug, Clone, ValueEnum)]
-pub enum ConvertTo {
-    Dxf,
-}
-
 pub fn run(
     ConvertOptions {
-        from: _from,
-        to: _to,
-        output: _output,
+        from,
+        to,
+        output,
         input,
     }: ConvertOptions,
 ) -> io::Result<()> {
-    let file = File::open(input)?;
-    let reader = BufReader::new(file);
-    for line in reader.lines() {
-        let Ok(line) = line else {
-            continue;
-        };
-        let line = line.trim();
-        if line.len() < MIN_LEN {
-            continue;
-        }
-        if line.starts_with("00NMSDR33") {
-            // SDR33
-            println!("SDR33 format is not supported yet");
-        } else if line.starts_with("00NMSDR20") {
-            // SDR2x
-            println!("SDR2x format is not supported yet");
-            return Ok(());
-        } else if line.starts_with("CO,Nikon RAW") {
-            // Nikon RAW
-            println!("Nikon RAW format is not supported yet");
-            return Ok(());
-        }
+    if from == to {
+        println!("Source and destination formats can't be the same");
+        return Ok(());
     }
+    let objects = match from {
+        Format::Dxf => DxfReader::new(&input)?.parse(),
+        Format::Sdr2x | Format::Sdr33 => SdrReader::new(&input)?.parse(),
+    };
+
+    let output = output.unwrap_or_else(|| input.with_extension(to.to_string()));
+    match to {
+        Format::Dxf => DxfWriter::new(objects).render(&output)?,
+        Format::Sdr2x => todo!(),
+        Format::Sdr33 => todo!(),
+    };
 
     Ok(())
 }
