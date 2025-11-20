@@ -3,8 +3,8 @@ use std::{collections::HashMap, io, path::Path};
 use dxf::{
     Color, Drawing, DxfError, Point,
     entities::{Circle, Entity, EntityCommon, EntityType, Line, Text},
-    enums::{DrawingUnits, UnitFormat, Units},
-    tables::Layer,
+    enums::{AcadVersion, DrawingUnits, UnitFormat, Units},
+    tables::{Layer, ViewPort},
 };
 
 use crate::format::Object;
@@ -36,6 +36,7 @@ impl DxfReader {
 impl DxfWriter {
     pub fn new(objects: Vec<Object>) -> Self {
         let mut drawing = Drawing::new();
+        drawing.header.version = AcadVersion::R2004;
         drawing.header.unit_format = UnitFormat::Architectural;
         drawing.header.drawing_units = DrawingUnits::Metric;
         drawing.header.default_drawing_units = Units::Meters;
@@ -55,6 +56,10 @@ impl DxfWriter {
         let mut last_points = HashMap::new();
         let mut color_index = COLOR_INDEX_GREEN;
 
+        let mut min_x = None;
+        let mut max_x = None;
+        let mut min_y = None;
+        let mut max_y = None;
         for object in objects {
             match object {
                 Object::Point {
@@ -64,6 +69,11 @@ impl DxfWriter {
                     name,
                     code,
                 } => {
+                    min_x = min_x.or(Some(n)).map(|x| x.min(n));
+                    max_x = max_x.or(Some(n)).map(|x| x.max(n));
+                    min_y = min_y.or(Some(e)).map(|y| y.min(e));
+                    max_y = max_y.or(Some(e)).map(|y| y.max(e));
+
                     drawing.add_entity(point_circle(n, e, z));
                     if !name.is_empty() {
                         drawing.add_entity(point_text(n, e, z, name));
@@ -101,6 +111,28 @@ impl DxfWriter {
                 }
             }
         }
+
+        let max_x = max_x.unwrap_or_default();
+        let max_y = max_y.unwrap_or_default();
+        let dx = max_x - min_x.unwrap_or_default();
+        let dy = max_y - min_y.unwrap_or_default();
+
+        drawing.add_view_port(ViewPort {
+            name: "*ACTIVE".to_string(),
+            view_center: Point {
+                x: max_x / 2.0,
+                y: max_y / 2.0,
+                z: 0.0,
+            },
+            view_height: dy,
+            view_port_aspect_ratio: dx / dy,
+            upper_right: Point {
+                x: 1.0,
+                y: 1.0,
+                z: 0.0,
+            },
+            ..Default::default()
+        });
 
         Self { drawing }
     }
