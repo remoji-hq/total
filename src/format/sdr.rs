@@ -4,7 +4,7 @@ use std::{
     path::Path,
 };
 
-use crate::format::Object;
+use crate::geometry::Object;
 
 pub struct SdrReader {
     version: SdrVersion,

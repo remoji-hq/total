@@ -7,7 +7,7 @@ use dxf::{
     tables::{Layer, ViewPort},
 };
 
-use crate::format::Object;
+use crate::geometry::Object;
 
 const POINTS_LAYER: &str = "POINTS";
 const TEXT_LAYER: &str = "TEXT";
@@ -16,20 +16,63 @@ const COLOR_INDEX_RED: u8 = 1;
 const COLOR_INDEX_YELLOW: u8 = 2;
 const COLOR_INDEX_GREEN: u8 = 3;
 
-pub struct DxfReader;
+pub struct DxfReader {
+    drawing: Drawing,
+}
 
 pub struct DxfWriter {
     drawing: Drawing,
 }
 
 impl DxfReader {
-    pub fn new(_path: impl AsRef<Path>) -> io::Result<Self> {
-        Ok(Self)
+    pub fn new(path: impl AsRef<Path>) -> io::Result<Self> {
+        let drawing = Drawing::load_file(path).map_err(|e| match e {
+            DxfError::IoError(err) => err,
+            err => io::Error::other(err),
+        })?;
+        Ok(Self { drawing })
     }
 
     pub fn parse(&mut self) -> Vec<Object> {
-        println!("Not implemented yet");
-        vec![]
+        let mut result = Vec::new();
+
+        let mut number = 1;
+        for entity in self.drawing.entities() {
+            let layer = &entity.common.layer;
+            match &entity.specific {
+                EntityType::Circle(circle) => {
+                    result.push(Object::Point {
+                        e: circle.center.x,
+                        n: circle.center.y,
+                        z: circle.center.z,
+                        name: number.to_string(),
+                        code: layer.clone(),
+                    });
+                    number += 1;
+                }
+                EntityType::Line(line) => {
+                    result.push(Object::Point {
+                        e: line.p1.x,
+                        n: line.p1.y,
+                        z: line.p1.z,
+                        name: number.to_string(),
+                        code: layer.clone(),
+                    });
+                    number += 1;
+                    result.push(Object::Point {
+                        e: line.p2.x,
+                        n: line.p2.y,
+                        z: line.p2.z,
+                        name: number.to_string(),
+                        code: layer.clone(),
+                    });
+                    number += 1;
+                }
+                _ => (),
+            }
+        }
+
+        result
     }
 }
 

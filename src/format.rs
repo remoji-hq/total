@@ -6,32 +6,24 @@ pub use self::sdr::SdrReader;
 mod dxf;
 mod sdr;
 
-#[derive(Debug, Clone, Copy, PartialEq, ValueEnum)]
-pub enum Format {
+#[derive(Debug, Clone, Copy, ValueEnum)]
+pub enum InFormat {
     /// AutoCAD DXF format
     Dxf,
-    /// Sokkia SDR2x format
-    Sdr2x,
-    /// Sokkia SDR33 format
-    Sdr33,
+    /// Sokkia SDR2x/SDR33 format
+    Sdr,
 }
 
-#[derive(Debug)]
-pub enum Object {
-    Point {
-        e: f64,
-        n: f64,
-        z: f64,
-        name: String,
-        code: String,
-    },
+#[derive(Debug, Clone, Copy, ValueEnum)]
+pub enum OutFormat {
+    /// AutoCAD DXF format
+    Dxf,
 }
 
-impl ToString for Format {
+impl ToString for OutFormat {
     fn to_string(&self) -> String {
         match self {
-            Format::Dxf => "dxf".to_string(),
-            Format::Sdr2x | Format::Sdr33 => "sdr".to_string(),
+            Self::Dxf => "dxf".to_string(),
         }
     }
 }

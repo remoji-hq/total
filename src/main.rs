@@ -6,6 +6,7 @@ use self::convert::ConvertOptions;
 
 mod convert;
 mod format;
+mod geometry;
 
 /// Total station helper tool
 #[derive(Parser, Debug)]
