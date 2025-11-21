@@ -49,25 +49,25 @@ impl SdrReader {
         while let Some(Ok(line)) = self.lines.next() {
             let line = line.trim();
             if line.starts_with("08KI") {
-                let (n, e, z, name, code) = match self.version {
+                let (name, n, e, z, code) = match self.version {
                     SdrVersion::Sdr2x => (
+                        line.get(4..8).unwrap_or_default(),
                         get_f64(line.get(8..18)),
                         get_f64(line.get(18..28)),
                         get_f64(line.get(28..38)),
-                        line.get(4..8).unwrap_or_default(),
                         line.get(38..).unwrap_or_default(),
                     ),
                     SdrVersion::Sdr33 => (
+                        line.get(4..20).unwrap_or_default(),
                         get_f64(line.get(20..36)),
                         get_f64(line.get(36..52)),
                         get_f64(line.get(52..68)),
-                        line.get(4..20).unwrap_or_default(),
                         line.get(68..).unwrap_or_default(),
                     ),
                 };
                 result.push(Object::Point {
-                    n,
                     e,
+                    n,
                     z,
                     name: name.trim().to_string(),
                     code: code.trim().to_string(),

@@ -19,11 +19,10 @@ pub enum Format {
 #[derive(Debug)]
 pub enum Object {
     Point {
-        n: f64,
         e: f64,
+        n: f64,
         z: f64,
         name: String,
-        #[allow(dead_code)]
         code: String,
     },
 }

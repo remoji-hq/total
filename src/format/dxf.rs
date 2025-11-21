@@ -57,43 +57,46 @@ impl DxfWriter {
         let mut color_index = COLOR_INDEX_GREEN;
 
         let mut min_x = None;
-        let mut max_x = None;
         let mut min_y = None;
+        let mut max_x = None;
         let mut max_y = None;
         for object in objects {
             match object {
                 Object::Point {
-                    n,
                     e,
+                    n,
                     z,
                     name,
                     code,
                 } => {
-                    min_x = min_x.or(Some(n)).map(|x| x.min(n));
-                    max_x = max_x.or(Some(n)).map(|x| x.max(n));
-                    min_y = min_y.or(Some(e)).map(|y| y.min(e));
-                    max_y = max_y.or(Some(e)).map(|y| y.max(e));
+                    let x = e;
+                    let y = n;
 
-                    drawing.add_entity(point_circle(n, e, z));
+                    min_x = min_x.or(Some(x)).map(|min_x| min_x.min(x));
+                    min_y = min_y.or(Some(y)).map(|min_y| min_y.min(y));
+                    max_x = max_x.or(Some(x)).map(|max_x| max_x.max(x));
+                    max_y = max_y.or(Some(y)).map(|max_y| max_y.max(y));
+
+                    drawing.add_entity(point_circle(x, y, z));
                     if !name.is_empty() {
-                        drawing.add_entity(point_text(n, e, z, name));
+                        drawing.add_entity(point_text(x, y, z, name));
                     }
                     let layer = if code.is_empty() {
                         "0".to_string()
                     } else {
                         code.clone()
                     };
-                    if let Some((last_n, last_e, last_z)) = last_points.get(&code) {
+                    if let Some((last_x, last_y, last_z)) = last_points.get(&code) {
                         drawing.add_entity(Entity {
                             common: EntityCommon {
                                 layer,
                                 ..Default::default()
                             },
                             specific: EntityType::Line(Line {
-                                p1: Point { x: n, y: e, z },
+                                p1: Point { x, y, z },
                                 p2: Point {
-                                    x: *last_n,
-                                    y: *last_e,
+                                    x: *last_x,
+                                    y: *last_y,
                                     z: *last_z,
                                 },
                                 ..Default::default()
@@ -107,7 +110,7 @@ impl DxfWriter {
                         });
                         color_index += 1;
                     }
-                    last_points.insert(code, (n, e, z));
+                    last_points.insert(code, (x, y, z));
                 }
             }
         }

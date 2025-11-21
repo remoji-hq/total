@@ -1,0 +1,26 @@
+CO,Nikon RAW data format V2.00
+CO,TEST
+CO,Description:
+CO,Client:
+CO,Comments:
+CO,Downloaded 01-Jan-2001 12:13:41
+CO,Software: Pre-install version: 1.22
+CO,Instrument: Nikon NPL-332
+CO,Dist Units: Metres
+CO,Angle Units: DDDMMSS
+CO,Zero azimuth: North
+CO,Zero VA: Horizontal
+CO,Coord Order: NEZ
+CO,HA Raw data: HA zero to BS
+CO,Tilt Correction:  VA:OFF HA:OFF
+CO, TEST <JOB> Created 01-Jan-2001 12:34:37
+CO,S/N:042380
+CO,Temp:11C Press:761mmHg Prism:0 01-Jan-2001 12:00:38
+CO,HA set in Quick Station
+ST,1,,,,0.000,0.0000,0.0000
+SS,2,0.000,4.209,347.5146,23.1204,12:02:46,
+SS,3,0.000,4.260,16.0232,22.3837,12:04:16,HOUSE
+SS,4,0.000,5.519,31.1601,17.0151,12:07:21,HOUSE
+SS,5,0.000,7.052,29.4404,11.1444,12:08:21,HOUSE
+SS,6,0.000,3.200,100.5632,30.0815,12:09:30,HOUSE
+
