@@ -1,4 +1,8 @@
-use std::{collections::HashMap, io, path::Path};
+use std::{
+    collections::{HashMap, HashSet},
+    io,
+    path::Path,
+};
 
 use dxf::{
     Color, Drawing, DxfError, Point,
@@ -15,6 +19,8 @@ const TEXT_LAYER: &str = "TEXT";
 const COLOR_INDEX_RED: u8 = 1;
 const COLOR_INDEX_YELLOW: u8 = 2;
 const COLOR_INDEX_GREEN: u8 = 3;
+
+const TEXT_POINT_PRECISION: f64 = 1000.0; // 1 mm
 
 pub struct DxfReader {
     drawing: Drawing,
@@ -36,37 +42,59 @@ impl DxfReader {
     pub fn parse(&mut self) -> Vec<Object> {
         let mut result = Vec::new();
 
-        let mut number = 1;
+        let mut point_names = HashMap::new();
         for entity in self.drawing.entities() {
-            let layer = &entity.common.layer;
+            match &entity.specific {
+                EntityType::Text(text) => {
+                    let x = (text.location.x * TEXT_POINT_PRECISION).round() as i32;
+                    let y = (text.location.y * TEXT_POINT_PRECISION).round() as i32;
+                    point_names.insert((x, y), text.value.clone());
+                }
+                _ => (),
+            }
+        }
+
+        let mut number = 1;
+        let mut point_name = |x: f64, y: f64| {
+            let x = (x * TEXT_POINT_PRECISION).round() as i32;
+            let y = (y * TEXT_POINT_PRECISION).round() as i32;
+            point_names
+                .get(&(x, y))
+                .map(Clone::clone)
+                .unwrap_or_else(|| {
+                    let name = format!("A{number}"); // Auto name
+                    number += 1;
+                    name
+                })
+        };
+
+        for entity in self.drawing.entities() {
+            let layer = entity.common.layer.trim().to_uppercase();
             match &entity.specific {
                 EntityType::Circle(circle) => {
                     result.push(Object::Point {
                         e: circle.center.x,
                         n: circle.center.y,
                         z: circle.center.z,
-                        name: number.to_string(),
+                        name: point_name(circle.center.x, circle.center.y),
                         code: layer.clone(),
                     });
-                    number += 1;
                 }
                 EntityType::Line(line) => {
                     result.push(Object::Point {
                         e: line.p1.x,
                         n: line.p1.y,
                         z: line.p1.z,
-                        name: number.to_string(),
+                        name: point_name(line.p1.x, line.p1.y),
                         code: layer.clone(),
                     });
-                    number += 1;
                     result.push(Object::Point {
                         e: line.p2.x,
                         n: line.p2.y,
                         z: line.p2.z,
-                        name: number.to_string(),
+                        name: point_name(line.p2.x, line.p2.y),
                         code: layer.clone(),
                     });
-                    number += 1;
                 }
                 _ => (),
             }
@@ -77,24 +105,28 @@ impl DxfReader {
 }
 
 impl DxfWriter {
-    pub fn new(objects: Vec<Object>) -> Self {
+    pub fn new(objects: Vec<Object>, layers: HashSet<String>) -> Self {
         let mut drawing = Drawing::new();
         drawing.header.version = AcadVersion::R2004;
         drawing.header.unit_format = UnitFormat::Architectural;
         drawing.header.drawing_units = DrawingUnits::Metric;
         drawing.header.default_drawing_units = Units::Meters;
 
-        drawing.add_layer(Layer {
-            name: POINTS_LAYER.to_string(),
-            color: Color::from_index(COLOR_INDEX_RED),
-            ..Default::default()
-        });
+        if layers.is_empty() || layers.contains(POINTS_LAYER) {
+            drawing.add_layer(Layer {
+                name: POINTS_LAYER.to_string(),
+                color: Color::from_index(COLOR_INDEX_RED),
+                ..Default::default()
+            });
+        }
 
-        drawing.add_layer(Layer {
-            name: TEXT_LAYER.to_string(),
-            color: Color::from_index(COLOR_INDEX_YELLOW),
-            ..Default::default()
-        });
+        if layers.is_empty() || layers.contains(TEXT_LAYER) {
+            drawing.add_layer(Layer {
+                name: TEXT_LAYER.to_string(),
+                color: Color::from_index(COLOR_INDEX_YELLOW),
+                ..Default::default()
+            });
+        }
 
         let mut last_points = HashMap::new();
         let mut color_index = COLOR_INDEX_GREEN;
@@ -129,6 +161,9 @@ impl DxfWriter {
                     } else {
                         code.clone()
                     };
+                    if !layers.is_empty() && !layers.contains(&layer) {
+                        continue;
+                    }
                     if let Some((last_x, last_y, last_z)) = last_points.get(&code) {
                         drawing.add_entity(Entity {
                             common: EntityCommon {
