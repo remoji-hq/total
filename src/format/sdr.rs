@@ -4,10 +4,11 @@ use std::{
     path::Path,
 };
 
-use crate::geometry::Object;
+use crate::{format::CoordOrder, geometry::Object};
 
 pub struct SdrReader {
     version: SdrVersion,
+    coord_order: CoordOrder,
     lines: Lines<BufReader<File>>,
 }
 
@@ -17,7 +18,7 @@ enum SdrVersion {
 }
 
 impl SdrReader {
-    pub fn new(path: impl AsRef<Path>) -> io::Result<Self> {
+    pub fn new(path: impl AsRef<Path>, coord_order: Option<CoordOrder>) -> io::Result<Self> {
         let file = File::open(path.as_ref())?;
         let reader = BufReader::new(file);
         let mut lines = reader.lines();
@@ -40,7 +41,11 @@ impl SdrReader {
             }
         };
 
-        Ok(Self { version, lines })
+        Ok(Self {
+            version,
+            coord_order: coord_order.unwrap_or_default(),
+            lines,
+        })
     }
 
     pub fn parse(&mut self) -> Vec<Object> {
@@ -49,7 +54,7 @@ impl SdrReader {
         while let Some(Ok(line)) = self.lines.next() {
             let line = line.trim();
             if line.starts_with("08KI") {
-                let (name, n, e, z, code) = match self.version {
+                let (name, a, b, c, code) = match self.version {
                     SdrVersion::Sdr2x => (
                         line.get(4..8).unwrap_or_default(),
                         get_f64(line.get(8..18)),
@@ -65,6 +70,10 @@ impl SdrReader {
                         line.get(68..).unwrap_or_default(),
                     ),
                 };
+                let (e, n, z) = match self.coord_order {
+                    CoordOrder::ENZ => (a, b, c),
+                    CoordOrder::NEZ => (b, a, c),
+                };
                 result.push(Object::Point {
                     e,
                     n,
@@ -72,6 +81,16 @@ impl SdrReader {
                     name: name.trim().to_string(),
                     code: code.trim().to_string(),
                 });
+            } else if line.starts_with("13NM") {
+                match line.to_uppercase() {
+                    line if line.ends_with("COORD ORDER: ENZ") => {
+                        self.coord_order = CoordOrder::ENZ
+                    }
+                    line if line.ends_with("COORD ORDER: NEZ") => {
+                        self.coord_order = CoordOrder::NEZ
+                    }
+                    _ => (),
+                }
             }
         }
 

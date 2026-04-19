@@ -3,25 +3,29 @@ use std::{collections::HashSet, io, path::PathBuf};
 use clap::Args;
 
 use crate::format::{
-    DxfReader, DxfWriter, InFormat, NikonCoordReader, NikonCoordWriter, OutFormat, SdrReader,
+    CoordOrder, DxfReader, DxfWriter, InFormat, NikonCoordReader, NikonCoordWriter, OutFormat,
+    SdrReader,
 };
 
 #[derive(Args, Debug)]
 pub struct ConvertOptions {
     /// Source data format
-    #[clap(short, long, value_enum, value_name = "FORMAT")]
+    #[arg(short, long, value_enum, value_name = "FORMAT")]
     from: InFormat,
     /// Destination data format
-    #[clap(short, long, value_enum, value_name = "FORMAT")]
+    #[arg(short, long, value_enum, value_name = "FORMAT")]
     to: OutFormat,
     /// Filter by layers (codes)
-    #[clap(short, long)]
+    #[arg(short, long)]
     layers: Vec<String>,
     /// Output file path
-    #[clap(short, long, value_name = "FILE")]
+    #[arg(short, long, value_name = "FILE")]
     output: Option<PathBuf>,
+    /// Set the default coordinate order
+    #[arg(long)]
+    coord_order: Option<CoordOrder>,
     /// Input file path
-    #[clap(value_name = "FILE")]
+    #[arg(value_name = "FILE")]
     input: PathBuf,
 }
 
@@ -32,19 +36,22 @@ pub fn run(
         output,
         input,
         layers,
+        coord_order,
     }: ConvertOptions,
 ) -> io::Result<()> {
     let objects = match from {
         InFormat::Dxf => DxfReader::new(&input)?.parse(),
-        InFormat::NikonCoord => NikonCoordReader::new(&input)?.parse(),
-        InFormat::Sdr => SdrReader::new(&input)?.parse(),
+        InFormat::NikonCoord => NikonCoordReader::new(&input, coord_order)?.parse(),
+        InFormat::Sdr => SdrReader::new(&input, coord_order)?.parse(),
     };
 
     let output = output.unwrap_or_else(|| input.with_extension(to.to_string()));
     let layers: HashSet<_> = layers.iter().map(|layer| layer.to_uppercase()).collect();
     match to {
         OutFormat::Dxf => DxfWriter::new(objects, layers).render(&output)?,
-        OutFormat::NikonCoord => NikonCoordWriter::new(objects, layers).render(&output)?,
+        OutFormat::NikonCoord => {
+            NikonCoordWriter::new(objects, layers).render(&output, coord_order)?
+        }
     };
 
     Ok(())

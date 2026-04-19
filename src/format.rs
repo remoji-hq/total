@@ -26,6 +26,15 @@ pub enum OutFormat {
     NikonCoord,
 }
 
+#[derive(Debug, Clone, Copy, ValueEnum, Default)]
+pub enum CoordOrder {
+    /// East-North-Z order
+    #[default]
+    ENZ,
+    /// North-East-Z order
+    NEZ,
+}
+
 impl ToString for OutFormat {
     fn to_string(&self) -> String {
         match self {

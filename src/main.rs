@@ -13,7 +13,7 @@ mod geometry;
 #[command(version, about, long_about = None)]
 struct Args {
     /// Command to execute. Options: `convert`
-    #[clap(subcommand)]
+    #[command(subcommand)]
     command: Command,
 }
 
